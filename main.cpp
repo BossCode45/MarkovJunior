@@ -16,7 +16,9 @@ enum Tile
 	Green,
 	DarkGreen,
 	Brown,
-	Yellow
+	Yellow,
+	LightBlue,
+	SuperDarkGreen,
 	//A
 };
 
@@ -34,11 +36,104 @@ struct Possibility
 	int theRule;
 };
 
-const int boardW = 30;
-const int boardH = 30;
+const int boardW = 50;
+const int boardH = 50;
 Tile board[boardH][boardW];
 
 vector<vector<Rule>> rules[] =
+	{
+		//River
+		{
+			{
+				{{Black}, {White}, 2},
+				{{Black}, {Red}, 2}
+			},
+			{
+				{{Red, Black}, {Red, Red}, -1},
+				{{White, Black}, {White, White}, -1}
+			},
+			{
+				{{Red, White}, {Blue, Blue}, -1}
+			}
+		},
+		//Shore
+		{
+			{
+				{{Blue, White}, {Blue, Yellow}, -1},
+				{{Blue, Red}, {Blue, Yellow}, -1}
+			},
+		},
+		//Widening
+		{
+			{
+				{{Yellow}, {Blue}, -1},
+			}
+		},
+		//Shore, again
+		{
+			{
+				{{Blue, White}, {Blue, Yellow}, -1},
+				{{Blue, Red}, {Blue, Yellow}, -1}
+			}
+		},
+		//Shallows
+		{
+			{
+				{{Yellow, Blue}, {Yellow, LightBlue}, -1}
+			}
+		},
+		//Boat
+		{
+			{
+				{{Blue}, {Brown}, 1},
+				{{Blue, Brown}, {Brown, Brown}, 1}
+			}
+		},
+		//Trees
+		{
+			{
+				{{White}, {Brown}, 3},
+				{{Red}, {Brown}, 3}
+			}
+		},
+		//Forest
+		{
+			{
+				{{White, Brown}, {DarkGreen, Brown}, -1},
+				{{Red, Brown}, {DarkGreen, Brown}, -1},
+				{{White, Yellow}, {Green, Yellow}, -1},
+				{{Red, Yellow}, {Green, Yellow}, -1}
+			},
+			{
+				{{Green, White}, {Green, Green}, -1},
+				{{Green, Red}, {Green, Green}, -1},
+				{{DarkGreen, White}, {DarkGreen, DarkGreen}, -1},
+				{{DarkGreen, Red}, {DarkGreen, DarkGreen}, -1},
+			}
+		},
+		//Leaves
+		{
+			{
+				{{Brown, DarkGreen}, {Brown, SuperDarkGreen}, -1},
+				{{Brown, Green}, {Brown, SuperDarkGreen}, -1},
+				{{Brown, Yellow}, {Brown, SuperDarkGreen}, -1}
+			}
+		},
+		//Bushes
+		{
+			{
+				{{Green}, {White}, 5},
+			},
+			{
+				{{White, Green}, {White, DarkGreen}, -1},
+				{{White, Yellow}, {White, DarkGreen}, -1},
+			},
+			{
+				{{White}, {DarkGreen}, -1}
+			}
+		}
+	};
+	/*
 	{
 		{
 			{
@@ -75,6 +170,7 @@ vector<vector<Rule>> rules[] =
 			}
 		}
 	};
+	*/
 	/*
 	{
 		{
@@ -92,6 +188,7 @@ vector<vector<Rule>> rules[] =
 
 void drawBoard()
 {
+	printf("\033[%d;%dH", (0), (0));
 	for(int y = 0; y < boardH; y++)
 	{
 		//Print space at start
@@ -113,17 +210,13 @@ void drawBoard()
 				case Black: cout << "\033[30m██\033[0m";break;
 				//case A: cout << "\033[36m██\033[0m";break;
 				case Red: cout << "\033[31m██\033[0m";break;
-				case Blue: cout << "\033[36m██\033[0m";break;
-				case Green: cout << "\033[32;1m██\033[0m";break;
+				case Blue: cout << "\033[38;5;19m██\033[0m";break;
+				case Green: cout << "\033[38;5;112m██\033[0m";break;
 				case DarkGreen: cout << "\033[38;5;28m██\033[0m";break;
 				case Brown: cout << "\033[38;5;166m██\033[0m";break;
 				case Yellow: cout << "\033[38;5;184m██\033[0m";break;
-				/*
-				case 'R': cout << "\033[31m██\033[0m";break;
-				case 'O': cout << "\033[33m██\033[0m";break;
-				case 'G': cout << "\033[32m██\033[0m";break;
-				case 'L': cout << "\033[36m██\033[0m";break;
-				*/
+				case LightBlue: cout << "\033[38;5;21m██\033[0m";break;
+				case SuperDarkGreen: cout << "\033[38;5;22m██\033[0m";break;
 			}
 			//cout << board[y][x];
 		}
@@ -215,6 +308,7 @@ void replace(int x, int y, int dir, vector<Tile> toReplace)
 int main()
 {
 	srand(time(NULL));
+	system("clear");
 	for(int y = 0; y < boardH; y++)
 	{
 		for(int x = 0; x < boardW; x++)
@@ -264,7 +358,8 @@ int main()
 				break;
 			}
 		}
-		//drawBoard();
+		//if(found == false)
+			//drawBoard();
+		drawBoard();
 	}
-	drawBoard();
 }
