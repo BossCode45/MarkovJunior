@@ -41,6 +41,7 @@ const int boardH = 50;
 Tile board[boardH][boardW];
 
 vector<vector<Rule>> rules[] =
+	//River scene
 	{
 		//River
 		{
@@ -134,44 +135,7 @@ vector<vector<Rule>> rules[] =
 		}
 	};
 	/*
-	{
-		{
-			{
-				{{Black}, {White}, 1},
-				{{Black}, {Red}, 1}
-			},
-			{
-				{{Red, Black}, {Red, Red}, -1},
-				{{White, Black}, {White, White}, -1}
-			},
-			{
-				{{Red, White}, {Blue, Blue}, -1}
-			},
-			{
-				{{Blue, White}, {Blue, Yellow}, -1},
-				{{Blue, Red}, {Blue, Yellow}, -1}
-			},
-		},
-		{
-			{
-				{{White}, {Brown}, 2},
-				{{Red}, {Brown}, 2}
-			}
-		},
-		{
-			{
-				{{White}, {DarkGreen}, -1},
-				{{Red}, {DarkGreen}, -1},
-			}
-		},
-		{
-			{
-				{{Brown, DarkGreen}, {Brown, Green}, -1}
-			}
-		}
-	};
-	*/
-	/*
+	//Basic maze
 	{
 		{
 			{
@@ -206,14 +170,13 @@ void drawBoard()
 
 			switch(board[y][x])
 			{
-				case White: cout << "\033[37m██\033[0m";break;
-				case Black: cout << "\033[30m██\033[0m";break;
-				//case A: cout << "\033[36m██\033[0m";break;
-				case Red: cout << "\033[31m██\033[0m";break;
+				case White: cout << "\033[38;5;15m██\033[0m";break;
+				case Black: cout << "\033[38;5;16m██\033[0m";break;
+				case Red: cout << "\033[38;5;9m██\033[0m";break;
 				case Blue: cout << "\033[38;5;19m██\033[0m";break;
 				case Green: cout << "\033[38;5;112m██\033[0m";break;
 				case DarkGreen: cout << "\033[38;5;28m██\033[0m";break;
-				case Brown: cout << "\033[38;5;166m██\033[0m";break;
+				case Brown: cout << "\033[38;5;94m██\033[0m";break;
 				case Yellow: cout << "\033[38;5;184m██\033[0m";break;
 				case LightBlue: cout << "\033[38;5;21m██\033[0m";break;
 				case SuperDarkGreen: cout << "\033[38;5;22m██\033[0m";break;
@@ -307,7 +270,8 @@ void replace(int x, int y, int dir, vector<Tile> toReplace)
 
 int main()
 {
-	srand(time(NULL));
+	int seed = time(NULL);
+	srand(seed);
 	system("clear");
 	for(int y = 0; y < boardH; y++)
 	{
@@ -362,4 +326,5 @@ int main()
 			//drawBoard();
 		drawBoard();
 	}
+	cout << "SEED: " << seed << endl;
 }
