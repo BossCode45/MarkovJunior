@@ -46,5 +46,7 @@ The heirachy is as follows
 + The rules in a group will be repeated until none of them can be applied
 + The groups of rules will be run sequentially until the last group finishes
 + The board initialises with all blacks
++ You can have 1 or more rules groups, 1 or more priority groups per rule group, 1 or more rules per priority group, 1 or more tiles per sequence
++ You must have the same length sequence to match as sequence to replace
 # Credits
 + mxgmn who came up with the algorithm (https://github.com/mxgmn/MarkovJunior)
