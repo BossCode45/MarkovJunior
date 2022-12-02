@@ -19,6 +19,8 @@ enum Tile
 	Yellow,
 	LightBlue,
 	SuperDarkGreen,
+	Orange,
+	Purple
 	//A
 };
 
@@ -41,6 +43,23 @@ const int boardH = 50;
 Tile board[boardH][boardW];
 
 vector<vector<Rule>> rules[] =
+	/*
+	//Rainbow
+	{
+		{
+			{
+				{{Black}, {Red}, 1},
+				{{Black, Red}, {Orange, Red}, -1},
+				{{Black, Orange}, {Yellow, Orange}, -1},
+				{{Black, Yellow}, {Green, Yellow}, -1},
+				{{Black, Green}, {LightBlue, Green}, -1},
+				{{Black, LightBlue}, {Blue, LightBlue}, -1},
+				{{Black, Blue}, {Purple, Blue}, -1},
+				{{Black, Purple}, {Red, Purple}, -1},
+			}
+		}
+	};
+	*/
 	//River scene
 	{
 		//River
@@ -172,7 +191,7 @@ void drawBoard()
 			{
 				case White: cout << "\033[38;5;15m██\033[0m";break;
 				case Black: cout << "\033[38;5;16m██\033[0m";break;
-				case Red: cout << "\033[38;5;9m██\033[0m";break;
+				case Red: cout << "\033[38;5;88m██\033[0m";break;
 				case Blue: cout << "\033[38;5;19m██\033[0m";break;
 				case Green: cout << "\033[38;5;112m██\033[0m";break;
 				case DarkGreen: cout << "\033[38;5;28m██\033[0m";break;
@@ -180,6 +199,8 @@ void drawBoard()
 				case Yellow: cout << "\033[38;5;184m██\033[0m";break;
 				case LightBlue: cout << "\033[38;5;21m██\033[0m";break;
 				case SuperDarkGreen: cout << "\033[38;5;22m██\033[0m";break;
+				case Orange: cout << "\033[38;5;166m██\033[0m";break;
+				case Purple: cout << "\033[38;5;54m██\033[0m";break;
 			}
 			//cout << board[y][x];
 		}
@@ -326,5 +347,6 @@ int main()
 			//drawBoard();
 		drawBoard();
 	}
+	//drawBoard();
 	cout << "SEED: " << seed << endl;
 }
