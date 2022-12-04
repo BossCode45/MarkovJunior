@@ -50,3 +50,4 @@ The heirachy is as follows
 + You must have the same length sequence to match as sequence to replace
 # Credits
 + mxgmn who came up with the algorithm (https://github.com/mxgmn/MarkovJunior)
++ nlohmann who made the json parser I'm using (https://github.com/nlohmann/json)

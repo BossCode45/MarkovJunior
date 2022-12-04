@@ -1,14 +1,22 @@
 #include <iostream>
 #include <string>
+#include <unordered_map>
 #include <vector>
+#include <unistd.h>
+#include <fstream>
+
+#include <nlohmann/json.hpp>
 
 using std::cout;
 using std::endl;
 using std::string;
 using std::vector;
 
+using json = nlohmann::json;
+
 enum Tile
 {
+	Any,
 	Black,
 	White,
 	Red,
@@ -23,28 +31,56 @@ enum Tile
 	Purple
 	//A
 };
+static std::unordered_map<std::string, Tile> const tileMap = {
+	{"Any", Tile::Any},
+	{"Black", Tile::Black},
+	{"White", Tile::White},
+	{"Red", Tile::Red},
+	{"Blue", Tile::Blue},
+	{"Green", Tile::Green},
+	{"DarkGreen", Tile::DarkGreen},
+	{"Brown", Tile::Brown},
+	{"Yellow", Tile::Yellow},
+	{"LightBlue", Tile::LightBlue},
+	{"SuperDarkGreen", Tile::SuperDarkGreen},
+	{"Orange", Tile::Orange},
+	{"Purple", Tile::Purple}
+};
 
 struct Rule
 {
-	vector<Tile> toFind;
-	vector<Tile> toReplace;
+	vector<vector<Tile>> toFind;
+	vector<vector<Tile>> toReplace;
 	int amnt;
+};
+struct Dir
+{
+	int xDir;
+	int yDir;
+	bool swap;
+};
+const Dir dirList[] =
+{
+	{1, 1, false},
+	{-1, 1, true},
+	{-1, -1, false},
+	{1, -1, true}
 };
 struct Possibility
 {
 	int x;
 	int y;
-	int dir;
+	Dir dir;
 	int theRule;
 };
 
-const int boardW = 50;
-const int boardH = 50;
-Tile board[boardH][boardW];
+int boardW = 51;
+int boardH = 51;
+Tile** board;
 
-vector<vector<Rule>> rules[] =
-	/*
+vector<vector<vector<Rule>>> rules;// =
 	//Rainbow
+	/*
 	{
 		{
 			{
@@ -61,6 +97,7 @@ vector<vector<Rule>> rules[] =
 	};
 	*/
 	//River scene
+	/*
 	{
 		//River
 		{
@@ -153,17 +190,23 @@ vector<vector<Rule>> rules[] =
 			}
 		}
 	};
-	/*
+	*/
 	//Basic maze
+	/*
 	{
 		{
 			{
-				{{W, B, B}, {W, A, W}, -1}
+				{{Black}, {White}, 1}
 			}
 		},
 		{
 			{
-				{{A}, {W}, -1}
+				{{White, Black, Black}, {White, Green, White}, -1}
+			}
+		},
+		{
+			{
+				{{Green}, {White}, -1}
 			}
 		}
 	};
@@ -208,103 +251,126 @@ void drawBoard()
 	}
 }
 
-bool check(int x, int y, int dir, vector<Tile> toFind)
+bool check(int x, int y, Dir dir, vector<vector<Tile>> toFind)
 {
-	if(dir == 0 && boardW - toFind.size() >= x)
+	int xDir = dir.xDir;
+	int yDir = dir.yDir;
+	bool swap = dir.swap;
+	for(int i = 0; i < toFind.size(); i++)
 	{
-		for(int i = 0; i < toFind.size(); i++)
+		for(int j = 0; j < toFind[i].size(); j++)
 		{
-			if(board[y][x + i] != toFind[i])
-			{
+			int boardY = y + (i*(!swap) + j*swap)*yDir;
+			int boardX = x + (i*swap + j*(!swap))*xDir;
+			if(0 > boardX || boardX >= boardW)
 				return false;
-			}
-		}
-		return true;
-	}
-	if(dir == 1 && boardH - toFind.size() >= y)
-	{
-		for(int i = 0; i < toFind.size(); i++)
-		{
-			if(board[y + i][x] != toFind[i])
-			{
+			if(0 > boardY || boardY >= boardH)
 				return false;
-			}
-		}
-		return true;
-	}
-	if(dir == 2 && x >= toFind.size()-1)
-	{
-		for(int i = 0; i < toFind.size(); i++)
-		{
-			if(board[y][x - i] != toFind[i])
-			{
+			Tile toCheck = toFind[i][j];
+			Tile tileInQuestion = board[boardY][boardX];
+			if(toCheck != tileInQuestion)
 				return false;
-			}
 		}
-		return true;
 	}
-	if(dir == 3 && y >= toFind.size()-1)
-	{
-		for(int i = 0; i < toFind.size(); i++)
-		{
-			if(board[y - i][x] != toFind[i])
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-	return false;
+	return true;
 }
 
-void replace(int x, int y, int dir, vector<Tile> toReplace)
+void replace(int x, int y, Dir dir, vector<vector<Tile>> toReplace)
 {
-	if(dir == 0)
+	int xDir = dir.xDir;
+	int yDir = dir.yDir;
+	bool swap = dir.swap;
+	for(int i = 0; i < toReplace.size(); i++)
 	{
-		for(int i = 0; i < toReplace.size(); i++)
+		for(int j = 0; j < toReplace[i].size(); j++)
 		{
-			board[y][x+i] = toReplace[i];
-		}
-	}
-	if(dir == 1)
-	{
-		for(int i = 0; i < toReplace.size(); i++)
-		{
-			board[y+i][x] = toReplace[i];
-		}
-	}
-	if(dir == 2)
-	{
-		for(int i = 0; i < toReplace.size(); i++)
-		{
-			board[y][x-i] = toReplace[i];
-		}
-	}
-	if(dir == 3)
-	{
-		for(int i = 0; i < toReplace.size(); i++)
-		{
-			board[y-i][x] = toReplace[i];
+			int boardY = y + (i*(!swap) + j*swap)*yDir;
+			int boardX = x + (i*swap + j*(!swap))*xDir;
+			if(0 > boardX || boardX > boardW - 1)
+				return;
+			if(0 > boardY || boardY > boardH - 1)
+				return;
+			Tile replacement = toReplace[i][j];
+			board[boardY][boardX] = replacement;
 		}
 	}
 }
 
 int main()
 {
-	int seed = time(NULL);
+	//Rand setup
+	int seed = time(NULL)+getpid();
 	srand(seed);
 	system("clear");
+
+	//Rule file setup
+	std::ifstream f("rules.json");
+	json rulesJson = json::parse(f);
+
+
+	//Rule file parsing
+	for(json ruleGroup : rulesJson["rules"])
+	{
+		vector<vector<Rule>> ruleGroupElements;
+		for(json rulePriority : ruleGroup)
+		{
+			vector<Rule> rulePriorityElements;
+			for(json rule : rulePriority)
+			{
+				vector<vector<Tile>> toMatch;
+				vector<vector<Tile>> toReplace;
+				for(json slice : rule[0])
+				{
+					vector<Tile> sliceElements;
+					for(json element : slice)
+					{
+						sliceElements.push_back(tileMap.find(element)->second);
+					}
+					toMatch.push_back(sliceElements);
+				}
+				for(json slice : rule[1])
+				{
+					vector<Tile> sliceElements;
+					for(json element : slice)
+					{
+						sliceElements.push_back(tileMap.find(element)->second);
+					}
+					toReplace.push_back(sliceElements);
+				}
+				Rule toAdd = {toMatch, toReplace, rule[2].get<int>()};
+				rulePriorityElements.push_back(toAdd);
+			}
+			ruleGroupElements.push_back(rulePriorityElements);
+		}
+		rules.push_back(ruleGroupElements);
+	}
+
+	//Board init
+	boardW = rulesJson["board"]["boardW"].get<int>();
+	boardH = rulesJson["board"]["boardH"].get<int>();
+	board = new Tile*[boardH];
 	for(int y = 0; y < boardH; y++)
 	{
+		board[y] = new Tile[boardW];
 		for(int x = 0; x < boardW; x++)
 		{
 			board[y][x] = Black;
 		}
 	}
+	if(rulesJson["board"].contains("starts"))
+	{
+		for(json start : rulesJson["board"]["starts"])
+		{
+			int x = start["x"].get<int>();
+			int y = start["y"].get<int>();
+			Tile t = tileMap.find(start["tile"])->second;
+			board[y][x] = t;
+		}
+	}
 	//board[rand()%boardH][rand()%boardW] = W;
 	//drawBoard();
 	bool found = false;
-	for(int group = 0; group < sizeof(rules)/sizeof(rules[0]); group+=found?0:1)
+	for(int group = 0; group < rules.size(); group+=found?0:1)
 	{
 		found = false;
 		for(int rulePriority = 0; rulePriority < rules[group].size(); rulePriority++)
@@ -322,7 +388,7 @@ int main()
 					for(int x = 0; x < boardW; x++)
 					{
 						//Check
-						for(int dir = 0; dir < 4; dir++)
+						for(Dir dir : dirList)
 						{
 							if(check(x, y, dir, rule.toFind))
 							{
@@ -348,5 +414,28 @@ int main()
 		drawBoard();
 	}
 	//drawBoard();
-	cout << "SEED: " << seed << endl;
+	cout << "SEED:\n\t" << seed << endl;
+	/*
+	cout << "RULES:" << endl;
+	for(json ruleGroup : rulesJson["rules"])
+	{
+		cout << "\tRule group:\n";
+		for(json rulePriority : ruleGroup)
+		{
+			cout << "\t\tRule prio:\n";
+			for(json rule : rulePriority)
+			{
+				cout << "\t\t\t" << rule << endl;
+			}
+		}
+	}
+	*/
+
+
+	//Cleanup
+	for(int i = 0; i < boardH; i++)
+	{
+		delete[] board[i];
+	}
+	delete[] board;
 }

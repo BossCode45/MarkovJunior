@@ -1,0 +1,27 @@
+{
+	"rules": [
+		[
+			[
+				[
+					[["Black"]],
+					[["White"]],
+					1
+				],
+				[
+					[["White", "Black", "Black"]],
+					[["White", "Green", "White"]],
+					-1
+				]
+			]
+		],
+		[
+			[
+				[
+					[["Green"]],
+					[["White"]],
+					-1
+				]
+			]
+		]
+	]
+}

@@ -1,0 +1,130 @@
+{
+	"board":
+	{
+		"boardW": 51,
+		"boardH": 51,
+		"starts":
+		[
+			{"x": 1, "y": 1, "tile": "Purple"}
+		]
+	},
+	"rules": [
+		[
+			[
+				[
+					[["Purple", "Black", "Black"]],
+					[["Purple", "Black", "Purple"]],
+					-1
+				]
+			]
+		],
+		[
+			[
+				[
+					[["Purple", "Black", "Purple", "Black", "Purple", "Black", "Purple", "Black", "Purple"],
+					["Black", "Black", "Black", "Black", "Black", "Black", "Black", "Black", "Black"],
+					["Purple", "Black", "Purple", "Black", "Purple", "Black", "Purple", "Black", "Purple"],
+					["Black", "Black", "Black", "Black", "Black", "Black", "Black", "Black", "Black"],
+					["Purple", "Black", "Purple", "Black", "Purple", "Black", "Purple", "Black", "Purple"],
+					["Black", "Black", "Black", "Black", "Black", "Black", "Black", "Black", "Black"],
+					["Purple", "Black", "Purple", "Black", "Purple", "Black", "Purple", "Black", "Purple"]],
+
+					[["White", "White", "White", "White", "White", "White", "White", "White", "White"],
+					["White", "White", "White", "White", "White", "White", "White", "White", "White"],
+					["White", "White", "White", "White", "White", "White", "White", "White", "White"],
+					["White", "White", "White", "White", "White", "White", "White", "White", "White"],
+					["White", "White", "White", "White", "White", "White", "White", "White", "White"],
+					["White", "White", "White", "White", "White", "White", "White", "White", "White"],
+					["White", "White", "White", "White", "White", "White", "White", "White", "White"]],
+					-1
+				]
+			]
+		],
+		[
+			[
+				[
+					[["Red", "Black", "Purple"]],
+					[["Green", "Green", "Red"]],
+					-1
+				]
+			],
+			[
+				[
+					[["Green", "Green", "Red"]],
+					[["Red", "White", "White"]],
+					-1
+				]
+			],
+			[
+				[
+					[["Purple"]],
+					[["Red"]],
+					-1
+				]
+			]
+		],
+		[
+			[
+				[
+					[["Red"]],
+					[["Green"]],
+					1
+				]
+			]
+		],
+		[
+			[
+				[
+					[["Red"]],
+					[["White"]],
+					-1
+				]
+			]
+		],
+		[
+			[
+				[
+					[["Green", "White", "White"]],
+					[["Green", "White", "Green"]],
+					-1
+				]
+			],
+			[
+				[
+					[["Green", "Black", "White"]],
+					[["Green", "White", "Green"]],
+					-1
+				]
+			]
+		],
+		[
+			[
+				[
+					[["Green", "Black", "Green"]],
+					[["Green", "White", "Green"]],
+					5
+				]
+			]
+		],
+		[
+			[
+				[
+					[["Green"]],
+					[["White"]],
+					-1
+				]
+			]
+		],
+		[
+			[
+				[
+					[["Black", "Black", "Black"],
+					 ["Black", "White", "Black"]],
+					[["Black", "Black", "Black"],
+					 ["Black", "Black", "Black"]],
+					-1
+				]
+			]
+		]
+	]
+}
