@@ -296,15 +296,21 @@ void replace(int x, int y, Dir dir, vector<vector<Tile>> toReplace)
 	}
 }
 
-int main()
+int main(int argc, char* argv[])
 {
+	string rulesFile = "rules.json";
+	if(argc > 1)
+	{
+		rulesFile = argv[1];
+	}
+
 	//Rand setup
 	int seed = time(NULL)+getpid();
 	srand(seed);
 	system("clear");
 
 	//Rule file setup
-	std::ifstream f("rules.json");
+	std::ifstream f(rulesFile);
 	json rulesJson = json::parse(f);
 
 

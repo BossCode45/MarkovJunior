@@ -1,4 +1,9 @@
 {
+	"board":
+	{
+		"boardW": 50,
+		"boardH": 50
+	},
 	"rules": [
 		[
 			[
