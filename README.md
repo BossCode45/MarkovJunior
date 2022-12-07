@@ -49,5 +49,5 @@ The heirachy is as follows
 + You can have 1 or more rules groups, 1 or more priority groups per rule group, 1 or more rules per priority group, 1 or more tiles per sequence
 + You must have the same length sequence to match as sequence to replace
 # Credits
-+ mxgmn who came up with the algorithm (https://github.com/mxgmn/MarkovJunior)
-+ nlohmann who made the json parser I'm using (https://github.com/nlohmann/json)
++ The markov junior algorithm: Gumin, M. (2022). MarkovJunior, a probabilistic programming language based on pattern matching and constraint propagation (Version 1.0) [Computer software]. https://github.com/mxgmn/MarkovJunior
++ The json parser I'm using: Lohmann, N. (2022). JSON for Modern C++ (Version 3.11.2) [Computer software]. https://github.com/nlohmann
