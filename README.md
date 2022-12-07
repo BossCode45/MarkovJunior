@@ -8,6 +8,7 @@ run `make`
 ## Running
 run `./main`
 ## Making the rules
+# THIS IS INCORRECT AND WILL BE CHANGED SOON
 The rules are stored in a variable called `rules` near the top of the code
 The heirachy is as follows
 ```
